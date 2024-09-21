@@ -33,6 +33,4 @@ int main() {
     for(int i = 0; i < oddCount; i++){
         printf(" %d", oddArr[i]);
     }
-
-    return 0;
 }
