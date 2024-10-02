@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "functions.h"
+#include "problem.h"
+
+void expiredProductRemoval(storeInventory *store,date expiryDate,date currentDate,int *expiredCount){
+    
+    int j = 0;
+    for(int i = 0; i < store->currentInventory.inventoryCount; i++){
+        date *itemExpiryDate = &store->currentInventory.product[i].expiryDate;
+        
+        if (currentDate.year > itemExpiryDate->year || (currentDate.year == itemExpiryDate->year && currentDate.month >= itemExpiryDate->month)) {
+            productInfo temp = store->currentInventory.product[i];
+            
+            store->expiredInventory.product[j++] = temp;
+            store->expiredInventory.inventoryCount++;
+            
+            memmove(store->currentInventory.product + i, store->currentInventory.product + i + 1, sizeof(productInfo) * (store->currentInventory.inventoryCount - (i + 1)));
+            store->currentInventory.inventoryCount--;
+            i--;
+            
+            
+            store->currentInventory.inventoryCost -= temp.price * temp.quantity;
+            store->expiredInventory.inventoryCost += temp.price * temp.quantity;
+        }
+    }
+}
